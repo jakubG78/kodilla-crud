@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.6.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
 }
 
 group = 'com.crud'
@@ -9,18 +9,18 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.projectlombok:lombok')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('mysql:mysql-connector-java')
-	annotationProcessor('org.projectlombok:lombok')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.projectlombok:lombok')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('mysql:mysql-connector-java')
+    annotationProcessor('org.projectlombok:lombok')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
