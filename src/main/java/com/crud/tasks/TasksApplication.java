@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 //public class TasksApplication extends SpringBootServletInitializer{
 public class TasksApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(TasksApplication.class, args);
     }
