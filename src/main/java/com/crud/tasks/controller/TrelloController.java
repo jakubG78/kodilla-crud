@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/trello")
 public class TrelloController {
@@ -27,3 +27,5 @@ public class TrelloController {
         return trelloClient.createNewCard(trelloCardDto);
     }
 }
+
+
