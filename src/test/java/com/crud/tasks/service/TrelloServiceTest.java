@@ -1,7 +1,9 @@
 package com.crud.tasks.service;
 
 import com.crud.tasks.config.AdminConfig;
+import com.crud.tasks.domain.CreatedTrelloCardDto;
 import com.crud.tasks.domain.TrelloBoardDto;
+import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.domain.TrelloListDto;
 import com.crud.tasks.trello.client.TrelloClient;
 import org.junit.Test;
@@ -75,8 +77,32 @@ public class TrelloServiceTest {
         });
     }
 
-//    public List<TrelloBoardDto> fetchTrelloBoards() {
-//        return trelloClient.getTrelloBoards();
-//    }
+    @Test
+    public void shouldCreateEmptyCard() {
+        //Given
+        TrelloCardDto trelloCardDto = new TrelloCardDto("test_card", "card for test", "23", "2");
+        when(trelloService.createdTrelloCard(trelloCardDto)).thenReturn(new CreatedTrelloCardDto());
+        //When
+        CreatedTrelloCardDto createdCart = trelloService.createdTrelloCard(trelloCardDto);
+
+        //Then
+        assertNotNull(createdCart);
+        assertEquals(null, createdCart.getId());
+    }
+
+    @Test
+    public void shouldCreateTrelloCard() {
+        //Given
+        TrelloCardDto trelloCardDto = new TrelloCardDto("test_card", "card for test", "23", "2");
+        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto("1", "created_test_card", "/newTestCardUrl");
+        when(trelloService.createdTrelloCard(trelloCardDto)).thenReturn(createdTrelloCardDto);
+        //When
+        CreatedTrelloCardDto createdCart = trelloService.createdTrelloCard(trelloCardDto);
+
+        //Then
+        assertNotNull(createdCart);
+        assertEquals("1", createdCart.getId());
+        assertEquals("/newTestCardUrl", createdCart.getShortUrl());
+    }
 
 }
