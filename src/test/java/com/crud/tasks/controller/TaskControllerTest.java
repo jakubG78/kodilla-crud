@@ -4,6 +4,7 @@ import com.crud.tasks.domain.Task;
 import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,13 +103,58 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void shouldUpdateTask() {
-        //fill code
+    public void shouldUpdateTask() throws Exception {
+        //Given
+        TaskDto taskDto = new TaskDto(
+                12L,
+                "Test Task",
+                "Task to be updated for test");
+        Task task = new Task(11L,
+                "Task",
+                "Insert task");
+        TaskDto updatedTask = new TaskDto(
+                12L,
+                "Updated Test Task",
+                "Updated task for test");
+
+        when(taskMapper.mapToTask(taskDto)).thenReturn(task);
+        when(taskMapper.mapToTaskDto(task)).thenReturn(updatedTask);
+        when(dbService.saveTask(task)).thenReturn(task);
+
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(taskDto);
+
+        //When & Then
+        mockMvc.perform(put("/v1/task/updateTask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()));
     }
 
     @Test
-    public void shouldCreateTask() {
-        //fill code
+    public void shouldCreateTask() throws Exception {
+        //Given
+        TaskDto taskDto = new TaskDto(
+                12L,
+                "Test Task",
+                "Task to be updated for test");
+        Task task = new Task(11L,
+                "Task",
+                "Insert task");
+        when(taskMapper.mapToTask(taskDto)).thenReturn(task);
+        when(dbService.saveTask(any(Task.class))).thenReturn(task);
+
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(taskDto);
+
+        //When & Then
+        mockMvc.perform(put("/v1/task/updateTask")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(jsonContent))
+                .andExpect(status().isOk());
     }
 
 
