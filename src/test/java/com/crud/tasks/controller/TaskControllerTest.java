@@ -13,12 +13,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -117,8 +119,8 @@ public class TaskControllerTest {
                 "Updated Test Task",
                 "Updated task for test");
 
-        when(taskMapper.mapToTask(taskDto)).thenReturn(task);
-        when(taskMapper.mapToTaskDto(task)).thenReturn(updatedTask);
+        when(taskMapper.mapToTask(any())).thenReturn(task);
+        when(taskMapper.mapToTaskDto(any())).thenReturn(updatedTask);
         when(dbService.saveTask(task)).thenReturn(task);
 
         Gson gson = new Gson();
@@ -129,8 +131,9 @@ public class TaskControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(jsonContent))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()));
+                .andExpect(jsonPath("$.title",is("Updated Test Task")));
     }
 
     @Test
@@ -150,12 +153,10 @@ public class TaskControllerTest {
         String jsonContent = gson.toJson(taskDto);
 
         //When & Then
-        mockMvc.perform(put("/v1/task/updateTask")
+        mockMvc.perform(post("/v1/task/createTask")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(jsonContent))
                 .andExpect(status().isOk());
     }
-
-
 }
